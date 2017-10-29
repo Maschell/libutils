@@ -8,14 +8,14 @@ extern "C" {
 #include <string.h>
 
 void log_init_();
-void log_deinit_(void);
+//void log_deinit_(void);
 void log_print_(const char *str);
 void log_printf_(const char *format, ...);
 
 #ifdef __LOGGING__
 
 #define log_init() log_init_()
-#define log_deinit() log_deinit_()
+//#define log_deinit() log_deinit_()
 #define log_print(str) log_print_(str)
 #define log_printf(FMT, ARGS...)  log_printf_(FMT, ## ARGS);
 
@@ -25,11 +25,11 @@ void log_printf_(const char *format, ...);
 #define DEBUG_FUNCTION_LINE(FMT, ARGS...)do { \
     log_printf("[%23s]%30s@L%04d: " FMT "",__FILENAME__,__FUNCTION__, __LINE__, ## ARGS); \
     } while (0)
-	
+
 #else
 
 #define log_init()
-#define log_deinit()
+//#define log_deinit()
 #define log_print(x)
 #define log_printf(x, ...)
 #define DEBUG_FUNCTION_LINE(FMT, ARGS...)

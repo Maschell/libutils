@@ -1053,10 +1053,10 @@ s32 unmount_sd_fat(const char *path){
     return result;
 }
 
-int mount_fake(){
+s32 mount_fake(){
     return sd_fat_add_device("fake", NULL, NULL, NULL);
 }
 
-int unmount_fake(){
+s32 unmount_fake(){
     return sd_fat_remove_device ("fake", NULL,NULL,NULL);
 }
