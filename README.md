@@ -30,6 +30,12 @@ Read the logs via the [udp_debug_reader](https://github.com/dimok789/loadiine_gx
 
 ## Usage (TODO)
 
+Link the application with
+
+```
+-lutils -ldynamiclibs
+```
+
 Check out the header for more information.
 
 ## Compiling

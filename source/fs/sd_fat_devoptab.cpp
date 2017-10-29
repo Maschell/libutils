@@ -22,7 +22,6 @@
  * distribution.
  ***************************************************************************/
 #include <errno.h>
-#include <ogc/disc_io.h>
 #include <sys/statvfs.h>
 #include <sys/dirent.h>
 #include <string.h>
@@ -31,6 +30,8 @@
 #include <stdio.h>
 #include <dynamic_libs/fs_functions.h>
 #include <dynamic_libs/os_functions.h>
+
+#include "disc_io.h"
 #include "FSOSUtils.h"
 #include "sd_fat_devoptab.h"
 #include "utils/StringTools.h"
