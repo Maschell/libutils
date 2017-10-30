@@ -31,6 +31,25 @@
 #define CODE_RW_BASE_OFFSET                             0x00000000
 #define DEBUG_LOG_DYN                                   0
 
+u32 acp_handle_internal = 0;
+u32 aoc_handle_internal = 0;
+u32 sound_handle_internal = 0;
+u32 sound_handle_internal_old = 0;
+u32 libcurl_handle_internal = 0;
+u32 gx2_handle_internal = 0;
+u32 nfp_handle_internal = 0;
+u32 nn_act_handle_internal = 0;
+u32 nn_nim_handle_internal = 0;
+u32 nn_save_handle_internal = 0;
+u32 ntag_handle_internal = 0;
+u32 coreinit_handle_internal = 0;
+u32 padscore_handle_internal = 0;
+u32 proc_ui_handle_internal = 0;
+u32 nsysnet_handle_internal = 0;
+u32 sysapp_handle_internal = 0;
+u32 syshid_handle_internal = 0;
+u32 vpad_handle_internal = 0;
+u32 vpadbase_handle_internal = 0;
 
 /*
 * Patches a function that is loaded at the start of each application. Its not required to restore, at least when they are really dynamic.
@@ -38,6 +57,8 @@
 */
 void PatchInvidualMethodHooks(hooks_magic_t method_hooks[],s32 hook_information_size, volatile u32 dynamic_method_calls[]){
     SetupKernelCallback(); //Patch Kernel. Just to be sure.
+    InitAcquireOS();
+    resetLibs();
 
     DEBUG_FUNCTION_LINE("Patching %d given functions\n",hook_information_size);
     /* Patch branches to it.  */
@@ -145,8 +166,9 @@ void PatchInvidualMethodHooks(hooks_magic_t method_hooks[],s32 hook_information_
 /* ****************************************************************** */
 /*                  RESTORE ORIGINAL INSTRUCTIONS                     */
 /* ****************************************************************** */
-void RestoreInvidualInstructions(hooks_magic_t method_hooks[],s32 hook_information_size)
-{
+void RestoreInvidualInstructions(hooks_magic_t method_hooks[],s32 hook_information_size){
+    InitAcquireOS();
+    resetLibs();
     DEBUG_FUNCTION_LINE("Restoring given functions!\n");
     s32 method_hooks_count = hook_information_size;
     for(s32 i = 0; i < method_hooks_count; i++)
@@ -223,130 +245,129 @@ u32 GetAddressOfFunction(const char * functionName,u32 library){
     u32 rpl_handle = 0;
     if(library == LIB_CORE_INIT){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_CORE_INIT\n", functionName);}
-        if(coreinit_handle == 0){InitAcquireOS();}
-        if(coreinit_handle == 0){DEBUG_FUNCTION_LINE("LIB_CORE_INIT failed to acquire\n"); return 0;}
-
-        rpl_handle = coreinit_handle;
+        if(coreinit_handle_internal == 0){OSDynLoad_Acquire("coreinit.rpl", &coreinit_handle_internal);}
+        if(coreinit_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_CORE_INIT failed to acquire\n"); return 0;}
+        rpl_handle = coreinit_handle_internal;
     }
     else if(library == LIB_NSYSNET){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_NSYSNET\n", functionName);}
-        if(nsysnet_handle == 0){InitAcquireSocket();}
-        if(nsysnet_handle == 0){DEBUG_FUNCTION_LINE("LIB_NSYSNET failed to acquire\n"); return 0;}
-        rpl_handle = nsysnet_handle;
+        if(nsysnet_handle_internal == 0){OSDynLoad_Acquire("nsysnet.rpl", &nsysnet_handle_internal);}
+        if(nsysnet_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_NSYSNET failed to acquire\n"); return 0;}
+        rpl_handle = nsysnet_handle_internal;
     }
     else if(library == LIB_GX2){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_GX2\n", functionName);}
-        if(gx2_handle == 0){InitAcquireGX2();}
-        if(gx2_handle == 0){DEBUG_FUNCTION_LINE("LIB_GX2 failed to acquire\n"); return 0;}
-        rpl_handle = gx2_handle;
+        if(gx2_handle_internal == 0){OSDynLoad_Acquire("gx2.rpl", &gx2_handle_internal);}
+        if(gx2_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_GX2 failed to acquire\n"); return 0;}
+        rpl_handle = gx2_handle_internal;
     }
     else if(library == LIB_AOC){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_AOC\n", functionName);}
-        if(aoc_handle == 0){InitAcquireAoc();}
-        if(aoc_handle == 0){DEBUG_FUNCTION_LINE("LIB_AOC failed to acquire\n"); return 0;}
-        rpl_handle = aoc_handle;
+        if(aoc_handle_internal == 0){OSDynLoad_Acquire("nn_aoc.rpl", &aoc_handle_internal);}
+        if(aoc_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_AOC failed to acquire\n"); return 0;}
+        rpl_handle = aoc_handle_internal;
     }
     else if(library == LIB_AX){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_AX\n", functionName);}
-        if(sound_handle == 0){InitAcquireAX();}
-        if(sound_handle == 0){DEBUG_FUNCTION_LINE("LIB_AX failed to acquire\n"); return 0;}
-        rpl_handle = sound_handle;
+        if(sound_handle_internal == 0){OSDynLoad_Acquire("sndcore2.rpl", &sound_handle_internal);}
+        if(sound_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_AX failed to acquire\n"); return 0;}
+        rpl_handle = sound_handle_internal;
     }
     else if(library == LIB_AX_OLD){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_AX_OLD\n", functionName);}
-        if(sound_handle_old == 0){InitAcquireAX();}
-        if(sound_handle_old == 0){DEBUG_FUNCTION_LINE("LIB_AX_OLD failed to acquire\n"); return 0;}
-        rpl_handle = sound_handle_old;
+        if(sound_handle_internal_old == 0){OSDynLoad_Acquire("snd_core.rpl", &sound_handle_internal_old);}
+        if(sound_handle_internal_old == 0){DEBUG_FUNCTION_LINE("LIB_AX_OLD failed to acquire\n"); return 0;}
+        rpl_handle = sound_handle_internal_old;
     }
     else if(library == LIB_FS){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_FS\n", functionName);}
-        if(coreinit_handle == 0){InitAcquireOS();}
-        if(coreinit_handle == 0){DEBUG_FUNCTION_LINE("LIB_FS failed to acquire\n"); return 0;}
-        rpl_handle = coreinit_handle;
+        if(coreinit_handle_internal == 0){OSDynLoad_Acquire("coreinit.rpl", &coreinit_handle_internal);}
+        if(coreinit_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_FS failed to acquire\n"); return 0;}
+        rpl_handle = coreinit_handle_internal;
     }
     else if(library == LIB_OS){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_OS\n", functionName);}
-        if(coreinit_handle == 0){InitAcquireOS();}
-        if(coreinit_handle == 0){DEBUG_FUNCTION_LINE("LIB_OS failed to acquire\n"); return 0;}
-        rpl_handle = coreinit_handle;
+        if(coreinit_handle_internal == 0){OSDynLoad_Acquire("coreinit.rpl", &coreinit_handle_internal);}
+        if(coreinit_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_OS failed to acquire\n"); return 0;}
+        rpl_handle = coreinit_handle_internal;
     }
     else if(library == LIB_PADSCORE){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_PADSCORE\n", functionName);}
-        if(padscore_handle == 0){InitAcquirePadScore();}
-        if(padscore_handle == 0){DEBUG_FUNCTION_LINE("LIB_PADSCORE failed to acquire\n"); return 0;}
-        rpl_handle = padscore_handle;
+        if(padscore_handle_internal == 0){OSDynLoad_Acquire("padscore.rpl", &padscore_handle_internal);}
+        if(padscore_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_PADSCORE failed to acquire\n"); return 0;}
+        rpl_handle = padscore_handle_internal;
     }
     else if(library == LIB_SOCKET){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_SOCKET\n", functionName);}
-        if(nsysnet_handle == 0){InitAcquireSocket();}
-        if(nsysnet_handle == 0){DEBUG_FUNCTION_LINE("LIB_SOCKET failed to acquire\n"); return 0;}
-        rpl_handle = nsysnet_handle;
+        if(nsysnet_handle_internal == 0){OSDynLoad_Acquire("nsysnet.rpl", &nsysnet_handle_internal);}
+        if(nsysnet_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_SOCKET failed to acquire\n"); return 0;}
+        rpl_handle = nsysnet_handle_internal;
     }
     else if(library == LIB_SYS){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_SYS\n", functionName);}
-        if(sysapp_handle == 0){InitAcquireSys();}
-        if(sysapp_handle == 0){DEBUG_FUNCTION_LINE("LIB_SYS failed to acquire\n"); return 0;}
-        rpl_handle = sysapp_handle;
+        if(sysapp_handle_internal == 0){OSDynLoad_Acquire("sysapp.rpl", &sysapp_handle_internal);}
+        if(sysapp_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_SYS failed to acquire\n"); return 0;}
+        rpl_handle = sysapp_handle_internal;
     }
     else if(library == LIB_VPAD){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_VPAD\n", functionName);}
-        if(vpad_handle == 0){InitAcquireVPad();}
-        if(vpad_handle == 0){DEBUG_FUNCTION_LINE("LIB_VPAD failed to acquire\n"); return 0;}
-        rpl_handle = vpad_handle;
+        if(vpad_handle_internal == 0){  OSDynLoad_Acquire("vpad.rpl", &vpad_handle_internal);}
+        if(vpad_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_VPAD failed to acquire\n"); return 0;}
+        rpl_handle = vpad_handle_internal;
     }
     else if(library == LIB_NN_ACP){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_NN_ACP\n", functionName);}
-        if(acp_handle == 0){InitAcquireACP();}
-        if(acp_handle == 0){DEBUG_FUNCTION_LINE("LIB_NN_ACP failed to acquire\n"); return 0;}
-        rpl_handle = acp_handle;
+        if(acp_handle_internal == 0){OSDynLoad_Acquire("nn_acp.rpl", &acp_handle_internal);}
+        if(acp_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_NN_ACP failed to acquire\n"); return 0;}
+        rpl_handle = acp_handle_internal;
     }
     else if(library == LIB_SYSHID){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_SYSHID\n", functionName);}
-        if(syshid_handle == 0){InitAcquireSysHID();}
-        if(syshid_handle == 0){DEBUG_FUNCTION_LINE("LIB_SYSHID failed to acquire\n"); return 0;}
-        rpl_handle = syshid_handle;
+        if(syshid_handle_internal == 0){OSDynLoad_Acquire("nsyshid.rpl", &syshid_handle_internal);}
+        if(syshid_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_SYSHID failed to acquire\n"); return 0;}
+        rpl_handle = syshid_handle_internal;
     }
     else if(library == LIB_VPADBASE){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_VPADBASE\n", functionName);}
-        if(vpadbase_handle == 0){InitAcquireVPad();}
-        if(vpadbase_handle == 0){DEBUG_FUNCTION_LINE("LIB_VPADBASE failed to acquire\n"); return 0;}
-        rpl_handle = vpadbase_handle;
+        if(vpadbase_handle_internal == 0){OSDynLoad_Acquire("vpadbase.rpl", &vpadbase_handle_internal);}
+        if(vpadbase_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_VPADBASE failed to acquire\n"); return 0;}
+        rpl_handle = vpadbase_handle_internal;
     }
     else if(library == LIB_PROC_UI){
         if(DEBUG_LOG_DYN){DEBUG_FUNCTION_LINE("FindExport of %s! From LIB_PROC_UI\n", functionName);}
-        if(proc_ui_handle == 0){InitAcquireProcUI();}
-        if(proc_ui_handle == 0){DEBUG_FUNCTION_LINE("LIB_PROC_UI failed to acquire\n"); return 0;}
-        rpl_handle = proc_ui_handle;
+        if(proc_ui_handle_internal == 0){OSDynLoad_Acquire("proc_ui.rpl", &proc_ui_handle_internal);}
+        if(proc_ui_handle_internal == 0){DEBUG_FUNCTION_LINE("LIB_PROC_UI failed to acquire\n"); return 0;}
+        rpl_handle = proc_ui_handle_internal;
     }
     else if(library == LIB_NTAG){
         if(DEBUG_LOG_DYN){log_printf("FindExport of %s! From LIB_NTAG\n", functionName);}
-        if(ntag_handle == 0){InitAcquireNTAG();}
-        if(ntag_handle == 0){log_print("LIB_NTAG failed to acquire\n"); return 0;}
-        rpl_handle = ntag_handle;
+        if(ntag_handle_internal == 0){OSDynLoad_Acquire("ntag.rpl", &ntag_handle_internal);}
+        if(ntag_handle_internal == 0){log_print("LIB_NTAG failed to acquire\n"); return 0;}
+        rpl_handle = ntag_handle_internal;
     }
     else if(library == LIB_NFP){
         if(DEBUG_LOG_DYN){log_printf("FindExport of %s! From LIB_NFP\n", functionName);}
-        if(nfp_handle == 0){InitAcquireNFP();}
-        if(nfp_handle == 0){log_print("LIB_NFP failed to acquire\n"); return 0;}
-        rpl_handle = nfp_handle;
+        if(nfp_handle_internal == 0){OSDynLoad_Acquire("nn_nfp.rpl", &nfp_handle_internal);}
+        if(nfp_handle_internal == 0){log_print("LIB_NFP failed to acquire\n"); return 0;}
+        rpl_handle = nfp_handle_internal;
     }
     else if(library == LIB_SAVE){
         if(DEBUG_LOG_DYN){log_printf("FindExport of %s! From LIB_SAVE\n", functionName);}
-        if(nn_save_handle == 0){InitAcquireSave();}
-        if(nn_save_handle == 0){log_print("LIB_SAVE failed to acquire\n"); return 0;}
-        rpl_handle = nn_save_handle;
+        if(nn_save_handle_internal == 0){OSDynLoad_Acquire("nn_save.rpl", &nn_save_handle_internal);}
+        if(nn_save_handle_internal == 0){log_print("LIB_SAVE failed to acquire\n"); return 0;}
+        rpl_handle = nn_save_handle_internal;
     }
     else if(library == LIB_ACT){
         if(DEBUG_LOG_DYN){log_printf("FindExport of %s! From LIB_ACT\n", functionName);}
-        if(nn_act_handle == 0){InitAcquireACT();}
-        if(nn_act_handle == 0){log_print("LIB_ACT failed to acquire\n"); return 0;}
-        rpl_handle = nn_act_handle;
+        if(nn_act_handle_internal == 0){OSDynLoad_Acquire("nn_act.rpl", &nn_act_handle_internal);}
+        if(nn_act_handle_internal == 0){log_print("LIB_ACT failed to acquire\n"); return 0;}
+        rpl_handle = nn_act_handle_internal;
     }
     else if(library == LIB_NIM){
         if(DEBUG_LOG_DYN){log_printf("FindExport of %s! From LIB_NIM\n", functionName);}
-        if(nn_nim_handle == 0){InitAcquireNim();}
-        if(nn_nim_handle == 0){log_print("LIB_NIM failed to acquire\n"); return 0;}
-        rpl_handle = nn_nim_handle;
+        if(nn_nim_handle_internal == 0){OSDynLoad_Acquire("nn_nim.rpl", &nn_nim_handle_internal);}
+        if(nn_nim_handle_internal == 0){log_print("LIB_NIM failed to acquire\n"); return 0;}
+        rpl_handle = nn_nim_handle_internal;
     }
 
     if(!rpl_handle){
@@ -374,4 +395,26 @@ u32 GetAddressOfFunction(const char * functionName,u32 library){
     }
 
     return real_addr;
+}
+
+void resetLibs(){
+    acp_handle_internal = 0;
+    aoc_handle_internal = 0;
+    sound_handle_internal = 0;
+    sound_handle_internal_old = 0;
+    libcurl_handle_internal = 0;
+    gx2_handle_internal = 0;
+    nfp_handle_internal = 0;
+    nn_act_handle_internal = 0;
+    nn_nim_handle_internal = 0;
+    nn_save_handle_internal = 0;
+    ntag_handle_internal = 0;
+    coreinit_handle_internal = 0;
+    padscore_handle_internal = 0;
+    proc_ui_handle_internal = 0;
+    nsysnet_handle_internal = 0;
+    sysapp_handle_internal = 0;
+    syshid_handle_internal = 0;
+    vpad_handle_internal = 0;
+    vpadbase_handle_internal = 0;
 }

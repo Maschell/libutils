@@ -23,23 +23,7 @@
 extern "C" {
 #endif
 
-#include <dynamic_libs/aoc_functions.h>
-#include <dynamic_libs/ax_functions.h>
-#include <dynamic_libs/fs_functions.h>
-#include <dynamic_libs/gx2_functions.h>
 #include <dynamic_libs/os_functions.h>
-#include <dynamic_libs/padscore_functions.h>
-#include <dynamic_libs/socket_functions.h>
-#include <dynamic_libs/sys_functions.h>
-#include <dynamic_libs/vpad_functions.h>
-#include <dynamic_libs/acp_functions.h>
-#include <dynamic_libs/syshid_functions.h>
-#include <dynamic_libs/proc_ui_functions.h>
-#include <dynamic_libs/ntag_functions.h>
-#include <dynamic_libs/nfp_functions.h>
-#include <dynamic_libs/nn_save_functions.h>
-#include <dynamic_libs/nn_act_functions.h>
-#include <dynamic_libs/nn_nim_functions.h>
 
 /* Macros for libs */
 #define LIB_CORE_INIT           0
@@ -90,6 +74,7 @@ void PatchInvidualMethodHooks(hooks_magic_t hook_information[],s32 hook_informat
 void RestoreInvidualInstructions(hooks_magic_t hook_information[],s32 hook_information_size);
 u32 GetAddressOfFunction(const char * functionName,u32 library);
 s32 isDynamicFunction(u32 physicalAddress);
+void resetLibs();
 
 //Orignal code by Chadderz.
 #define MAKE_MAGIC(x, lib,functionType) { (u32) my_ ## x, (u32) &real_ ## x, lib, # x,0,0,functionType,0}

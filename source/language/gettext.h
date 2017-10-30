@@ -22,6 +22,9 @@ extern "C"
 {
 #endif
 
+    #define tr(s) gettext(s)
+    #define trNOOP(s) s
+
 	bool gettextLoadLanguage(const char* langFile);
 	void gettextCleanUp(void);
 	/*
