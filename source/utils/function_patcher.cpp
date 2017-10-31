@@ -26,6 +26,7 @@
 #include "logger.h"
 #include "kernel/kernel_defs.h"
 #include "kernel/kernel_functions.h"
+#include "kernel/syscalls.h"
 
 #define LIB_CODE_RW_BASE_OFFSET                         0xC1000000
 #define CODE_RW_BASE_OFFSET                             0x00000000

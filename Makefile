@@ -113,8 +113,7 @@ install:
 	@cp source/language/*.h $(INCLUDEDIR)/language/
 	@cp source/fs/*.h $(INCLUDEDIR)/fs/
 	@cp source/fs/*.hpp $(INCLUDEDIR)/fs/
-	@cp source/kernel/kernel_functions.h $(INCLUDEDIR)/kernel/
-	@cp source/kernel/kernel_defs.h $(INCLUDEDIR)/kernel/
+	@cp source/kernel/*.h $(INCLUDEDIR)/kernel/
 
 #---------------------------------------------------------------------------------
 else
