@@ -25,7 +25,6 @@
 #include "function_patcher.h"
 #include "logger.h"
 #include "kernel/kernel_defs.h"
-#include "kernel/kernel_functions.h"
 #include "kernel/syscalls.h"
 
 #define LIB_CODE_RW_BASE_OFFSET                         0xC1000000
@@ -57,7 +56,6 @@ u32 vpadbase_handle_internal = 0;
 * "normal" functions should be patch with the normal patcher. Current Code by Maschell with the help of dimok. Orignal code by Chadderz.
 */
 void PatchInvidualMethodHooks(hooks_magic_t method_hooks[],s32 hook_information_size, volatile u32 dynamic_method_calls[]){
-    SetupKernelCallback(); //Patch Kernel. Just to be sure.
     InitAcquireOS();
     resetLibs();
 
