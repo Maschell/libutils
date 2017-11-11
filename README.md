@@ -36,6 +36,12 @@ Link the application with
 -lutils -ldynamiclibs
 ```
 
+You also need to add the include path to your Makefile. Example:
+
+```
+export INCLUDE	:= [...]  -I$(PORTLIBS)/include/libutils
+```
+
 Check out the header for more information.
 
 ## Compiling
