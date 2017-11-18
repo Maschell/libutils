@@ -1,0 +1,37 @@
+language: c
+sudo: false
+
+os:
+  - linux
+
+env:
+  global:
+    - DEVKITPRO=$HOME/devkitPro
+    - DEVKITPPC=${DEVKITPRO}/devkitPPC
+	- DEVKITTMP=${DEVKITPRO}/tmp
+
+cache:
+  directories:
+    - ${DEVKITPRO}
+
+addons:
+  apt:
+    packages:
+    - p7zip-full
+
+before_install: 
+  - wget https://raw.githubusercontent.com/Maschell/dynamic_libs/lib/other/devkitPPCupdatePPCr29.pl
+  - mkdir -p $DEVKITTMP
+  - cd $DEVKITTMP
+  - git clone https://github.com/Maschell/dynamic_libs.git -b lib
+
+install:
+  - perl devkitPPCupdate.pl
+  - cd $DEVKITTMP/dynamic_libs
+  - 7z x -y ./libs/portlibs.zip -o${DEVKITPRO}
+  - make
+  - make install
+  
+script:
+  - make
+  
