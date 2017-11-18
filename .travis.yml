@@ -35,5 +35,6 @@ install:
   - make install
   
 script:
+  - cd $HOME
   - make
   
