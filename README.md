@@ -1,5 +1,6 @@
 # libutils for WiiU homebrew.
-[![Build Status](https://travis-ci.org/Maschell/libutils.svg?branch=master)](https://travis-ci.org/Maschell/libutils)
+[![Build Status](https://travis-ci.org/Maschell/libutils.svg?branch=master)](https://travis-ci.org/Maschell/libutils)  
+
 This is a library for common functions.
 
 ## Features

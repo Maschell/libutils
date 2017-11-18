@@ -8,7 +8,7 @@ env:
   global:
     - DEVKITPRO=$HOME/devkitPro
     - DEVKITPPC=${DEVKITPRO}/devkitPPC
-	- DEVKITTMP=${DEVKITPRO}/tmp
+    - DEVKITTMP=${DEVKITPRO}/tmp
 
 cache:
   directories:
