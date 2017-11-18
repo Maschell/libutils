@@ -26,7 +26,7 @@ before_install:
   - git clone https://github.com/Maschell/dynamic_libs.git -b lib
 
 install:
-  - perl devkitPPCupdate.pl
+  - perl devkitPPCupdatePPCr29.pl
   - cd $DEVKITTMP/dynamic_libs
   - 7z x -y ./libs/portlibs.zip -o${DEVKITPRO}
   - make
