@@ -7,8 +7,8 @@ os:
 env:
   global:
     - DEVKITPRO=$HOME/devkitPro
-    - DEVKITPPC=${DEVKITPRO}/devkitPPC
-    - DEVKITTMP=${DEVKITPRO}/tmp
+    - DEVKITPPC=${DEVKITPRO}/devkitPPC	
+    - DEVKITTMP=$HOME/tmpFolder
 
 cache:
   directories:
@@ -20,21 +20,19 @@ addons:
     - p7zip-full
 
 before_install: 
-  - cd $HOME
   - wget https://raw.githubusercontent.com/Maschell/dynamic_libs/lib/other/devkitPPCupdatePPCr29.pl
   - mkdir -p $DEVKITTMP
-  - cd $DEVKITTMP
   - git clone https://github.com/Maschell/dynamic_libs.git -b lib
 
 install:
-  - cd $HOME
   - perl devkitPPCupdatePPCr29.pl
   - cd $DEVKITTMP/dynamic_libs
   - 7z x -y ./libs/portlibs.zip -o${DEVKITPRO}
-  - make
-  - make install
-  
+  - make && make install
+ 
+before_script:
+- cd $TRAVIS_BUILD_DIR/
+ 
 script:
-  - cd $HOME
   - make
   
