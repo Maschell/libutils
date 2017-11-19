@@ -7,8 +7,7 @@ os:
 env:
   global:
     - DEVKITPRO=$HOME/devkitPro
-    - DEVKITPPC=${DEVKITPRO}/devkitPPC	
-    - DEVKITTMP=$HOME/tmpFolder
+    - DEVKITPPC=${DEVKITPRO}/devkitPPC
 
 cache:
   directories:
@@ -20,23 +19,17 @@ addons:
     - p7zip-full
 
 before_install: 
-  - mkdir -p $DEVKITPRO
-  - cd $DEVKITPRO
-  - wget https://raw.githubusercontent.com/Maschell/libutils/master/other/devkitPPCupdatePPCr29.pl
-  - mkdir -p $DEVKITTMP
-  - cd $DEVKITTMP
-  - git clone https://github.com/Maschell/dynamic_libs.git -b lib
+  - mkdir -p "${DEVKITPRO}/libogc"
+  - wget http://download.sourceforge.net/devkitpro/devkitPPC_r29-1-x86_64-linux.tar.bz2 -O devkitPPC-linux.tar.bz2
+  - wget http://download.sourceforge.net/devkitpro/libogc-1.8.17.tar.bz2 -O libogc.tar.bz2
+  - wget https://github.com/Maschell/dynamic_libs/archive/lib.tar.gz -O dynamic_libs.tar.gz
 
 install:
-  - cd $DEVKITPRO
-  - perl devkitPPCupdatePPCr29.pl
-  - cd $DEVKITTMP/dynamic_libs
-  - 7z x -y ./libs/portlibs.zip -o${DEVKITPRO}
-  - make && make install
- 
-before_script:
-  - cd $TRAVIS_BUILD_DIR/
- 
+  - tar -xjf devkitPPC-linux.tar.bz2 -C ${DEVKITPRO}/
+  - tar -xjf libogc.tar.bz2 -C ${DEVKITPRO}/libogc
+  - tar -xzvf dynamic_libs.tar.gz
+  - 7z x -y ./dynamic_libs-lib/libs/portlibs.zip -o${DEVKITPRO}
+  - (cd dynamic_libs-lib && make && make install)
+
 script:
   - make
-  
