@@ -20,18 +20,22 @@ addons:
     - p7zip-full
 
 before_install: 
+  - mkdir -p $DEVKITPRO
+  - cd $DEVKITPRO
   - wget https://raw.githubusercontent.com/Maschell/dynamic_libs/lib/other/devkitPPCupdatePPCr29.pl
   - mkdir -p $DEVKITTMP
+  - cd $DEVKITTMP
   - git clone https://github.com/Maschell/dynamic_libs.git -b lib
 
 install:
+  - cd $DEVKITPRO
   - perl devkitPPCupdatePPCr29.pl
   - cd $DEVKITTMP/dynamic_libs
   - 7z x -y ./libs/portlibs.zip -o${DEVKITPRO}
   - make && make install
  
 before_script:
-- cd $TRAVIS_BUILD_DIR/
+  - cd $TRAVIS_BUILD_DIR/
  
 script:
   - make
