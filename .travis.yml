@@ -19,14 +19,12 @@ addons:
     - p7zip-full
 
 before_install: 
-  - mkdir -p "${DEVKITPRO}/libogc"
+  - mkdir -p "${DEVKITPRO}"
   - wget http://download.sourceforge.net/devkitpro/devkitPPC_r29-1-x86_64-linux.tar.bz2 -O devkitPPC-linux.tar.bz2
-  - wget http://download.sourceforge.net/devkitpro/libogc-1.8.17.tar.bz2 -O libogc.tar.bz2
   - wget https://github.com/Maschell/dynamic_libs/archive/lib.tar.gz -O dynamic_libs.tar.gz
 
 install:
   - tar -xjf devkitPPC-linux.tar.bz2 -C ${DEVKITPRO}/
-  - tar -xjf libogc.tar.bz2 -C ${DEVKITPRO}/libogc
   - tar -xzvf dynamic_libs.tar.gz
   - 7z x -y ./dynamic_libs-lib/libs/portlibs.zip -o${DEVKITPRO}
   - (cd dynamic_libs-lib && make && make install)
