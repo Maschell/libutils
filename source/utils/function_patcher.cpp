@@ -377,8 +377,11 @@ u32 GetAddressOfFunction(const char * functionName,u32 library){
     OSDynLoad_FindExport(rpl_handle, 0, functionName, &real_addr);
 
     if(!real_addr){
-        DEBUG_FUNCTION_LINE("OSDynLoad_FindExport failed for %s\n", functionName);
-        return 0;
+        OSDynLoad_FindExport(rpl_handle, 1, functionName, &real_addr);
+        if(!real_addr){
+            DEBUG_FUNCTION_LINE("OSDynLoad_FindExport failed for %s\n", functionName);
+            return 0;
+        }
     }
 
     if((library == LIB_NN_ACP) && (u32)(*(volatile u32*)(real_addr) & 0x48000002) == 0x48000000)
