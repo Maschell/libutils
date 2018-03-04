@@ -9,6 +9,7 @@ class FSUtils{
         //! todo: C++ class
         static s32 CreateSubfolder(const char * fullpath);
         static s32 CheckFile(const char * filepath);
+        static bool saveBufferToFile(const char * path, void * buffer, u32 size);
 };
 
 #endif // __FS_UTILS_H_

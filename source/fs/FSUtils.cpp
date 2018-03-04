@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include "FSUtils.h"
+#include "CFile.hpp"
 
 s32 FSUtils::LoadFileToMem(const char *filepath, u8 **inbuffer, u32 *size){
     //! always initialze input
@@ -136,3 +137,16 @@ s32 FSUtils::CreateSubfolder(const char * fullpath){
 
 	return 1;
 }
+
+bool FSUtils::saveBufferToFile(const char * path, void * buffer, u32 size){
+    s32 res = open(path, O_CREAT | O_TRUNC | O_WRONLY);
+    close(res);
+    CFile file(path, CFile::WriteOnly);
+    if (!file.isOpen()){        
+        return false;
+    }
+    file.write((const u8*) buffer,size);
+    file.close();
+    return true;
+}
+

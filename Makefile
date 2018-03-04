@@ -32,7 +32,7 @@ LIB		:=	lib
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-CFLAGS	= -g -O2 -Wall -D__wiiu__ -D_GNU_SOURCE $(MACHDEP) $(INCLUDE)
+CFLAGS	= -g -Os -Wall -D__wiiu__ -D_GNU_SOURCE $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
 ifeq ($(DO_LOGGING), 1)
