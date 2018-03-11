@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include "FSUtils.h"
 #include "CFile.hpp"
+#include "utils/logger.h"
 
 s32 FSUtils::LoadFileToMem(const char *filepath, u8 **inbuffer, u32 *size){
     //! always initialze input
@@ -142,7 +143,8 @@ bool FSUtils::saveBufferToFile(const char * path, void * buffer, u32 size){
     s32 res = open(path, O_CREAT | O_TRUNC | O_WRONLY);
     close(res);
     CFile file(path, CFile::WriteOnly);
-    if (!file.isOpen()){        
+    if (!file.isOpen()){
+        DEBUG_FUNCTION_LINE("Failed to open %s\n",path);
         return false;
     }
     file.write((const u8*) buffer,size);
