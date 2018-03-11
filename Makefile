@@ -22,6 +22,7 @@ SOURCES		:=	source \
 				source/fs \
 				source/utils \
 				source/language \
+				source/network \
 				source/system \
 				source/kernel
 INCLUDES	:=	include \
@@ -106,12 +107,14 @@ install:
 	@mkdir -p $(INCLUDEDIR)/utils/
 	@mkdir -p $(INCLUDEDIR)/kernel/
 	@mkdir -p $(INCLUDEDIR)/system/
+	@mkdir -p $(INCLUDEDIR)/network/
 	@mkdir -p $(INCLUDEDIR)/language/
 	@mkdir -p $(INCLUDEDIR)/fs/
 	@cp source/utils/*.h $(INCLUDEDIR)/utils/
 	@cp source/utils/*.hpp $(INCLUDEDIR)/utils/
 	@cp source/system/*.h $(INCLUDEDIR)/system/
 	@cp source/language/*.h $(INCLUDEDIR)/language/
+	@cp source/network/*.h $(INCLUDEDIR)/network/
 	@cp source/fs/*.h $(INCLUDEDIR)/fs/
 	@cp source/fs/*.hpp $(INCLUDEDIR)/fs/
 	@cp source/kernel/*.h $(INCLUDEDIR)/kernel/
