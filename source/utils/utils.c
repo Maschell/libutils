@@ -24,7 +24,7 @@ void dumpHex(const void* data, size_t size) {
             log_printf(" ");
             if ((i+1) % 16 == 0) {
                 log_printf("|  %s \n", ascii);
-                if(i + 1 < size){
+                if(i + 1 < size) {
                     DEBUG_FUNCTION_LINE("0x%08X (0x%04X); ", data + i + 1,i+1);
                 }
             } else if (i+1 == size) {
