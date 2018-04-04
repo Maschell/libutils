@@ -91,6 +91,13 @@ public:
     virtual bool isThreadRunning(void) const {
         return !isThreadSuspended() && !isThreadRunning();
     }
+
+    //! Gets the thread affinity.
+    virtual u16 getThreadAffinity(void) const {
+        if(pThread) return OSGetThreadAffinity(pThread);
+        return 0;
+    }
+
     //! Shutdown thread
     virtual void shutdownThread(void) {
         //! wait for thread to finish

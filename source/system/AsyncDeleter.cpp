@@ -28,8 +28,9 @@ AsyncDeleter::~AsyncDeleter() {
 }
 
 void AsyncDeleter::triggerDeleteProcess(void) {
-    if(!deleterInstance)
-        deleterInstance = new AsyncDeleter;
+    if(!deleterInstance){
+        return;
+    }
 
     //! to trigger the event after GUI process is finished execution
     //! this function is used to swap elements from one to next array
