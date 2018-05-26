@@ -7,11 +7,12 @@ dist: trusty
 env:
   global:
     - DEVKITPRO=$HOME/devkitPro
+    - PORTLIBREPOS=$HOME/portlibrepos
 
 cache:
   directories:
     - "$HOME/.local"
-    - "/home/travis/portlibrepos"
+    - "$PORTLIBREPOS"
 
 addons:
   apt:
