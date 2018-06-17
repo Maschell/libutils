@@ -1,18 +1,14 @@
-# libutils for WiiU homebrew.
-[![Build Status](https://travis-ci.org/Maschell/libutils.svg?branch=master)](https://travis-ci.org/Maschell/libutils)  
+# libutils for WiiU homebrew. (WUT edition)
+[![Build Status](https://travis-ci.org/Maschell/libutils.svg?branch=wut)](https://travis-ci.org/Maschell/libutils)  
 
 This is a library for common functions.
 
 ## Features
 
 - FS utility functions
-- Wrapper for easy kernel read/write (KernelCopyData to copy data to any place)
 - Multiple language support via gettext
 - Common system functions (Exception handler, memory functions, Thread wrapper etc.)
-- Built in function patcher engine
 - String tools
-
-(For some features the application need to be loaded from the homebrew_launcher to have kernel access)
 
 ## Logging usage
 To able to use the logging, you need to compile the target application with follow C/C++ flag:
@@ -22,6 +18,7 @@ To able to use the logging, you need to compile the target application with foll
 
 Usage in the application:
 ```
+socket_lib_init();
 log_init(); // Enables broadcast logging.
 printf("Just prints this text\n");
 DEBUG_FUNCTION_LINE("This prints my current function, file and line\n");
@@ -34,31 +31,32 @@ Read the logs via the [udp_debug_reader](https://github.com/dimok789/loadiine_gx
 Link the application with
 
 ```
--lutils -ldynamiclibs
+-lutilswut
 ```
 
 You also need to add the include path to your Makefile. Example:
 
 ```
-export INCLUDE	:= [...]  -I$(PORTLIBS)/include/libutils
+export INCLUDE	:= [...]  -I$(WUT_ROOT)/include/libutils
 ```
 
 Check out the header for more information.
 
 ## Compiling
 
-For compiling and using this lib, you need the [dynamic_libs](https://github.com/Maschell/dynamic_libs/tree/lib) installed to your portlibs folder.
+For compiling and using this lib, you need the [wut](https://github.com/decaf-emu/wut) installed.
 
-Install this static library into your portlibs folder via: 
+Install this static library into your wut folder via: 
 
 ```
-make && make install
+mkdir build && cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=$WUT_ROOT/share/wut.toolchain.cmake -DCMAKE_INSTALL_PREFIX=$WUT_ROOT ../
+make install
 ```
 
 ## Dependencies
 
-- Application needs to be loaded from the [homebrew_launcher](https://github.com/dimok789/homebrew_launcher)
-- [dynamic_libs](https://github.com/Maschell/dynamic_libs/tree/lib) for access to the functions.
+- [wut](https://github.com/decaf-emu/wut)
 
 # Credits (TODO)
 
