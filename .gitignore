@@ -1,3 +1,4 @@
 release/*
+build/*
 libutils.cbp
 libutils.depend
