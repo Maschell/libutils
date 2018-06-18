@@ -35,7 +35,7 @@ void log_print_(const char *str) {
     }
 
     while(log_lock)
-       OSSleepTicks(OSMillisecondsToTicks(1000));
+       OSSleepTicks(OSMicrosecondsToTicks(1000));
     log_lock = 1;
 
     int len = strlen(str);

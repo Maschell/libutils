@@ -47,7 +47,7 @@ void TCPServer::CloseSockets() {
 
 void TCPServer::ErrorHandling() {
     CloseSockets();
-    OSSleepTicks(OSMillisecondsToTicks(1000*1000*2));
+    OSSleepTicks(OSMicrosecondsToTicks(1000*1000*2));
 }
 
 void TCPServer::DoTCPThreadInternal() {

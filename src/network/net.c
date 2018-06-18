@@ -13,7 +13,7 @@ void initNetwork(){
 
 s32 recvwait(s32 sock, void *buffer, s32 len) {
     while(socket_lock) {
-        OSSleepTicks(OSMillisecondsToTicks(1000));
+        OSSleepTicks(OSMicrosecondsToTicks(1000));
     }
     s32 ret;
     while (len > 0) {
@@ -49,7 +49,7 @@ u32 recvword(s32 sock) {
 
 s32 checkbyte(s32 sock) {
     while(socket_lock) {
-        OSSleepTicks(OSMillisecondsToTicks(1000));
+        OSSleepTicks(OSMicrosecondsToTicks(1000));
     }
     unsigned char buffer[1];
     s32 ret;
@@ -63,7 +63,7 @@ s32 checkbyte(s32 sock) {
 
 s32 sendwait(s32 sock, const void *buffer, s32 len) {
     while(socket_lock) {
-        OSSleepTicks(OSMillisecondsToTicks(1000));
+        OSSleepTicks(OSMicrosecondsToTicks(1000));
     }
     s32 ret;
     while (len > 0) {
