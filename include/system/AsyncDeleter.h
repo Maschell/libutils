@@ -43,14 +43,14 @@ public:
         deleterInstance->deleteElements.push(e);
     }
 
-    static bool deleteListEmpty() {
+    static BOOL deleteListEmpty() {
         if(!deleterInstance) {
             return true;
         }
         return deleterInstance->deleteElements.empty();
     }
 
-    static bool realListEmpty() {
+    static BOOL realListEmpty() {
         if(!deleterInstance) {
             return true;
         }
@@ -67,7 +67,7 @@ private:
 
     void executeThread(void);
 
-    bool exitApplication;
+    BOOL exitApplication;
     std::queue<AsyncDeleter::Element *> deleteElements;
     std::queue<AsyncDeleter::Element *> realDeleteElements;
     CMutex deleteMutex;

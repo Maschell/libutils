@@ -36,16 +36,16 @@
 #include <utils/StringTools.h>
 
 
-bool StringTools::EndsWith(const std::string& a, const std::string& b) {
+BOOL StringTools::EndsWith(const std::string& a, const std::string& b) {
     if (b.size() > a.size()) return false;
     return std::equal(a.begin() + a.size() - b.size(), a.end(), b.begin());
 }
 
-const char * StringTools::byte_to_binary(s32 x) {
+const char * StringTools::byte_to_binary(int32_t x) {
     static char b[9];
     b[0] = '\0';
 
-    s32 z;
+    int32_t z;
     for (z = 128; z > 0; z >>= 1) {
         strcat(b, ((x & z) == z) ? "1" : "0");
     }
@@ -71,7 +71,7 @@ const char * StringTools::fmt(const char * format, ...) {
 
     va_list va;
     va_start(va, format);
-    if((vsprintf(strChar, format, va) >= 0)) {        
+    if((vsprintf(strChar, format, va) >= 0)) {
         va_end(va);
         return (const char *) strChar;
     }
@@ -96,7 +96,7 @@ const wchar_t * StringTools::wfmt(const char * format, ...) {
     va_start(va, format);
     if((vsprintf(tmp, format, va) >= 0)) {
         int	bt;
-        s32 strlength = strlen(tmp);
+        int32_t strlength = strlen(tmp);
         bt = mbstowcs(strWChar, tmp, (strlength < 512) ? strlength : 512 );
 
         if(bt > 0) {
@@ -109,10 +109,10 @@ const wchar_t * StringTools::wfmt(const char * format, ...) {
     return NULL;
 }
 
-s32 StringTools::strprintf(std::string &str, const char * format, ...) {
+int32_t StringTools::strprintf(std::string &str, const char * format, ...) {
     static char tmp[512];
     tmp[0] = 0;
-    s32 result = 0;
+    int32_t result = 0;
 
     va_list va;
     va_start(va, format);
@@ -140,7 +140,7 @@ std::string StringTools::strfmt(const char * format, ...) {
     return str;
 }
 
-bool StringTools::char2wchar_t(const char * strChar, wchar_t * dest) {
+BOOL StringTools::char2wchar_t(const char * strChar, wchar_t * dest) {
     if(!strChar || !dest)
         return false;
 
@@ -154,7 +154,7 @@ bool StringTools::char2wchar_t(const char * strChar, wchar_t * dest) {
     return false;
 }
 
-s32 StringTools::strtokcmp(const char * string, const char * compare, const char * separator) {
+int32_t StringTools::strtokcmp(const char * string, const char * compare, const char * separator) {
     if(!string || !compare)
         return -1;
 
@@ -174,7 +174,7 @@ s32 StringTools::strtokcmp(const char * string, const char * compare, const char
     return -1;
 }
 
-s32 StringTools::strextcmp(const char * string, const char * extension, char seperator) {
+int32_t StringTools::strextcmp(const char * string, const char * extension, char seperator) {
     if(!string || !extension)
         return -1;
 
@@ -190,7 +190,7 @@ std::vector<std::string> StringTools::stringSplit(const std::string & inValue, c
     std::string value = inValue;
     std::vector<std::string> result;
     while (true) {
-        u32 index = value.find(splitter);
+        uint32_t index = value.find(splitter);
         if (index == std::string::npos) {
             result.push_back(value);
             break;

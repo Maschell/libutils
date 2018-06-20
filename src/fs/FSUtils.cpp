@@ -7,28 +7,28 @@
 #include <fs/CFile.hpp>
 #include <utils/logger.h>
 
-s32 FSUtils::LoadFileToMem(const char *filepath, u8 **inbuffer, u32 *size) {
+int32_t FSUtils::LoadFileToMem(const char *filepath, uint8_t **inbuffer, uint32_t *size) {
     //! always initialze input
     *inbuffer = NULL;
     if(size)
         *size = 0;
 
-    s32 iFd = open(filepath, O_RDONLY);
+    int32_t iFd = open(filepath, O_RDONLY);
     if (iFd < 0)
         return -1;
 
-    u32 filesize = lseek(iFd, 0, SEEK_END);
+    uint32_t filesize = lseek(iFd, 0, SEEK_END);
     lseek(iFd, 0, SEEK_SET);
 
-    u8 *buffer = (u8 *) malloc(filesize);
+    uint8_t *buffer = (uint8_t *) malloc(filesize);
     if (buffer == NULL) {
         close(iFd);
         return -2;
     }
 
-    u32 blocksize = 0x4000;
-    u32 done = 0;
-    s32 readBytes = 0;
+    uint32_t blocksize = 0x4000;
+    uint32_t done = 0;
+    int32_t readBytes = 0;
 
     while(done < filesize) {
         if(done + blocksize > filesize) {
@@ -58,7 +58,7 @@ s32 FSUtils::LoadFileToMem(const char *filepath, u8 **inbuffer, u32 *size) {
     return filesize;
 }
 
-s32 FSUtils::CheckFile(const char * filepath) {
+int32_t FSUtils::CheckFile(const char * filepath) {
     if(!filepath)
         return 0;
 
@@ -81,16 +81,16 @@ s32 FSUtils::CheckFile(const char * filepath) {
     return 0;
 }
 
-s32 FSUtils::CreateSubfolder(const char * fullpath) {
+int32_t FSUtils::CreateSubfolder(const char * fullpath) {
     if(!fullpath)
         return 0;
 
-    s32 result = 0;
+    int32_t result = 0;
 
     char dirnoslash[strlen(fullpath)+1];
     strcpy(dirnoslash, fullpath);
 
-    s32 pos = strlen(dirnoslash)-1;
+    int32_t pos = strlen(dirnoslash)-1;
     while(dirnoslash[pos] == '/') {
         dirnoslash[pos] = '\0';
         pos--;
@@ -129,15 +129,15 @@ s32 FSUtils::CreateSubfolder(const char * fullpath) {
     return 1;
 }
 
-bool FSUtils::saveBufferToFile(const char * path, void * buffer, u32 size) {
-    s32 res = open(path, O_CREAT | O_TRUNC | O_WRONLY);
+BOOL FSUtils::saveBufferToFile(const char * path, void * buffer, uint32_t size) {
+    int32_t res = open(path, O_CREAT | O_TRUNC | O_WRONLY);
     close(res);
     CFile file(path, CFile::WriteOnly);
     if (!file.isOpen()) {
         DEBUG_FUNCTION_LINE("Failed to open %s\n",path);
         return false;
     }
-    file.write((const u8*) buffer,size);
+    file.write((const uint8_t*) buffer,size);
     file.close();
     return true;
 }

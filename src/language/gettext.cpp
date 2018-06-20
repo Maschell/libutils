@@ -39,7 +39,7 @@ char* strdup (const char* s)
 }
 
 typedef struct _MSG {
-    u32 id;
+    uint32_t id;
     char* msgstr;
     struct _MSG *next;
 } MSG;
@@ -50,16 +50,16 @@ static MSG *baseMSG = 0;
 /* Defines the so called `hashpjw' function by P.J. Weinberger
  [see Aho/Sethi/Ullman, COMPILERS: Principles, Techniques and Tools,
  1986, 1987 Bell Telephone Laboratories, Inc.]  */
-static inline u32 hash_string(const char *str_param) {
-    u32 hval, g;
+static inline uint32_t hash_string(const char *str_param) {
+    uint32_t hval, g;
     const char *str = str_param;
 
     /* Compute the hash value for the given string.  */
     hval = 0;
     while (*str != '\0') {
         hval <<= 4;
-        hval += (u8) *str++;
-        g = hval & ((u32) 0xf << (HASHWORDBITS - 4));
+        hval += (uint8_t) *str++;
+        g = hval & ((uint32_t) 0xf << (HASHWORDBITS - 4));
         if (g != 0) {
             hval ^= g >> (HASHWORDBITS - 8);
             hval ^= g;
@@ -158,7 +158,7 @@ terminate:
     return retval;
 }
 
-static MSG *findMSG(u32 id) {
+static MSG *findMSG(uint32_t id) {
     MSG *msg;
     for (msg = baseMSG; msg; msg = msg->next) {
         if (msg->id == id) return msg;
@@ -167,7 +167,7 @@ static MSG *findMSG(u32 id) {
 }
 
 static MSG *setMSG(const char *msgid, const char *msgstr) {
-    u32 id = hash_string(msgid);
+    uint32_t id = hash_string(msgid);
     MSG *msg = findMSG(id);
     if (!msg) {
         msg = (MSG *) malloc(sizeof(MSG));
@@ -196,7 +196,7 @@ extern "C" void gettextCleanUp(void) {
     }
 }
 
-extern "C" bool gettextLoadLanguage(const char* langFile) {
+extern "C" BOOL gettextLoadLanguage(const char* langFile) {
     char *lastID = NULL;
     gettextCleanUp();
 
@@ -206,7 +206,7 @@ extern "C" bool gettextLoadLanguage(const char* langFile) {
 
     std::string strBuffer;
     strBuffer.resize(file.size());
-    file.read((u8 *) &strBuffer[0], strBuffer.size());
+    file.read((uint8_t *) &strBuffer[0], strBuffer.size());
     file.close();
 
     //! remove all windows crap signs

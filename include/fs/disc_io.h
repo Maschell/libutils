@@ -43,12 +43,12 @@
 
 typedef uint32_t sec_t;
 
-typedef bool (* FN_MEDIUM_STARTUP)(void) ;
-typedef bool (* FN_MEDIUM_ISINSERTED)(void) ;
-typedef bool (* FN_MEDIUM_READSECTORS)(sec_t sector, sec_t numSectors, void* buffer) ;
-typedef bool (* FN_MEDIUM_WRITESECTORS)(sec_t sector, sec_t numSectors, const void* buffer) ;
-typedef bool (* FN_MEDIUM_CLEARSTATUS)(void) ;
-typedef bool (* FN_MEDIUM_SHUTDOWN)(void) ;
+typedef BOOL (* FN_MEDIUM_STARTUP)(void) ;
+typedef BOOL (* FN_MEDIUM_ISINSERTED)(void) ;
+typedef BOOL (* FN_MEDIUM_READSECTORS)(sec_t sector, sec_t numSectors, void* buffer) ;
+typedef BOOL (* FN_MEDIUM_WRITESECTORS)(sec_t sector, sec_t numSectors, const void* buffer) ;
+typedef BOOL (* FN_MEDIUM_CLEARSTATUS)(void) ;
+typedef BOOL (* FN_MEDIUM_SHUTDOWN)(void) ;
 
 struct DISC_INTERFACE_STRUCT {
     unsigned long			ioType ;

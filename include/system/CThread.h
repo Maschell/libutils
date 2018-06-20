@@ -28,7 +28,7 @@ public:
     typedef void (* Callback)(CThread *thread, void *arg);
 
     //! constructor
-    CThread(s32 iAttr, s32 iPriority = 16, s32 iStackSize = 0x8000, CThread::Callback callback = NULL, void *callbackArg = NULL)
+    CThread(int32_t iAttr, int32_t iPriority = 16, int32_t iStackSize = 0x8000, CThread::Callback callback = NULL, void *callbackArg = NULL)
         : pThread(NULL)
         , pThreadStack(NULL)
         , pCallback(callback)
@@ -38,7 +38,7 @@ public:
         //! allocate the thread
         pThread = (OSThread*)memalign(8, sizeof(OSThread));
         //! allocate the stack
-        pThreadStack = (u8 *) memalign(0x20, iStackSize);
+        pThreadStack = (uint8_t *) memalign(0x20, iStackSize);
         //! create the thread
         if(pThread && pThreadStack)
             OSCreateThread(pThread, &CThread::threadCallback, 1, (char*)this, pThreadStack+iStackSize, iStackSize, iPriority, iAttributes);
@@ -49,7 +49,7 @@ public:
         shutdownThread();
     }
 
-    static CThread *create(CThread::Callback callback, void *callbackArg, s32 iAttr = eAttributeNone, s32 iPriority = 16, s32 iStackSize = 0x8000) {
+    static CThread *create(CThread::Callback callback, void *callbackArg, int32_t iAttr = eAttributeNone, int32_t iPriority = 16, int32_t iStackSize = 0x8000) {
         return ( new CThread(iAttr, iPriority, iStackSize, callback, callbackArg) );
     }
 
@@ -77,17 +77,17 @@ public:
         if(pThread) OSSetThreadPriority(pThread, prio);
     }
     //! Check if thread is suspended
-    virtual bool isThreadSuspended(void) const {
+    virtual BOOL isThreadSuspended(void) const {
         if(pThread) return OSIsThreadSuspended(pThread);
         return false;
     }
     //! Check if thread is terminated
-    virtual bool isThreadTerminated(void) const {
+    virtual BOOL isThreadTerminated(void) const {
         if(pThread) return OSIsThreadTerminated(pThread);
         return false;
     }
     //! Check if thread is running
-    virtual bool isThreadRunning(void) const {
+    virtual BOOL isThreadRunning(void) const {
         return !isThreadSuspended() && !isThreadRunning();
     }
     //! Shutdown thread
@@ -125,7 +125,7 @@ private:
     }
     int iAttributes;
     OSThread *pThread;
-    u8 *pThreadStack;
+    uint8_t *pThreadStack;
     Callback pCallback;
     void *pCallbackArg;
 };

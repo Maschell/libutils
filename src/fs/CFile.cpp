@@ -16,7 +16,7 @@ CFile::CFile(const std::string & filepath, eOpenTypes mode) {
     this->open(filepath, mode);
 }
 
-CFile::CFile(const u8 * mem, s32 size) {
+CFile::CFile(const uint8_t * mem, int32_t size) {
     iFd = -1;
     this->open(mem, size);
 }
@@ -25,10 +25,10 @@ CFile::~CFile() {
     this->close();
 }
 
-s32 CFile::open(const std::string & filepath, eOpenTypes mode) {
+int32_t CFile::open(const std::string & filepath, eOpenTypes mode) {
     this->close();
 
-    s32 openMode = 0;
+    int32_t openMode = 0;
 
     switch(mode) {
     default:
@@ -61,7 +61,7 @@ s32 CFile::open(const std::string & filepath, eOpenTypes mode) {
     return 0;
 }
 
-s32 CFile::open(const u8 * mem, s32 size) {
+int32_t CFile::open(const uint8_t * mem, int32_t size) {
     this->close();
 
     mem_file = mem;
@@ -80,17 +80,17 @@ void CFile::close() {
     pos = 0;
 }
 
-s32 CFile::read(u8 * ptr, size_t size) {
+int32_t CFile::read(uint8_t * ptr, size_t size) {
     if(iFd >= 0) {
-        s32 ret = ::read(iFd, ptr,size);
+        int32_t ret = ::read(iFd, ptr,size);
         if(ret > 0)
             pos += ret;
         return ret;
     }
 
-    s32 readsize = size;
+    int32_t readsize = size;
 
-    if(readsize > (s64) (filesize-pos))
+    if(readsize > (int64_t) (filesize-pos))
         readsize = filesize-pos;
 
     if(readsize <= 0)
@@ -105,11 +105,11 @@ s32 CFile::read(u8 * ptr, size_t size) {
     return -1;
 }
 
-s32 CFile::write(const u8 * ptr, size_t size) {
+int32_t CFile::write(const uint8_t * ptr, size_t size) {
     if(iFd >= 0) {
         size_t done = 0;
         while(done < size) {
-            s32 ret = ::write(iFd, ptr, size - done);
+            int32_t ret = ::write(iFd, ptr, size - done);
             if(ret <= 0)
                 return ret;
 
@@ -123,9 +123,9 @@ s32 CFile::write(const u8 * ptr, size_t size) {
     return -1;
 }
 
-s32 CFile::seek(long int offset, s32 origin) {
-    s32 ret = 0;
-    s64 newPos = pos;
+int32_t CFile::seek(long int offset, int32_t origin) {
+    int32_t ret = 0;
+    int64_t newPos = pos;
 
     if(origin == SEEK_SET) {
         newPos = offset;
@@ -153,15 +153,15 @@ s32 CFile::seek(long int offset, s32 origin) {
     return ret;
 }
 
-s32 CFile::fwrite(const char *format, ...) {
+int32_t CFile::fwrite(const char *format, ...) {
     char tmp[512];
     tmp[0] = 0;
-    s32 result = -1;
+    int32_t result = -1;
 
     va_list va;
     va_start(va, format);
     if((vsprintf(tmp, format, va) >= 0)) {
-        result = this->write((u8 *)tmp, strlen(tmp));
+        result = this->write((uint8_t *)tmp, strlen(tmp));
     }
     va_end(va);
 

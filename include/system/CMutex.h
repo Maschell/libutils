@@ -43,7 +43,7 @@ public:
         if(pMutex)
             OSUnlockMutex(pMutex);
     }
-    bool tryLock(void) {
+    BOOL tryLock(void) {
         if(!pMutex)
             return false;
 

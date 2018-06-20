@@ -5,12 +5,12 @@
 
 class FSUtils {
 public:
-    static s32 LoadFileToMem(const char *filepath, u8 **inbuffer, u32 *size);
+    static int32_t LoadFileToMem(const char *filepath, uint8_t **inbuffer, uint32_t *size);
 
     //! todo: C++ class
-    static s32 CreateSubfolder(const char * fullpath);
-    static s32 CheckFile(const char * filepath);
-    static bool saveBufferToFile(const char * path, void * buffer, u32 size);
+    static int32_t CreateSubfolder(const char * fullpath);
+    static int32_t CheckFile(const char * filepath);
+    static BOOL saveBufferToFile(const char * path, void * buffer, uint32_t size);
 };
 
 #endif // __FS_UTILS_H_

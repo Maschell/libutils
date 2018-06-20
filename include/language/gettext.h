@@ -17,6 +17,8 @@
 #ifndef _GETTEXT_H_
 #define _GETTEXT_H_
 
+#include <wut_types.h>
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -25,7 +27,7 @@ extern "C"
 #define tr(s) gettext(s)
 #define trNOOP(s) s
 
-bool gettextLoadLanguage(const char* langFile);
+BOOL gettextLoadLanguage(const char* langFile);
 void gettextCleanUp(void);
 /*
  * input msg = a text in ASCII

@@ -1,7 +1,7 @@
 #ifndef _TCPSERVER_H_
 #define _TCPSERVER_H_
 
-#include <sys/select.h> 
+#include <sys/select.h>
 
 #include <nsysnet/socket.h>
 #include <system/CThread.h>
@@ -12,22 +12,22 @@
 
 class TCPServer {
 public:
-    TCPServer(s32 port, s32 priority);
+    TCPServer(int32_t port, int32_t priority);
     virtual ~TCPServer();
 
-    bool isConnected() {
+    BOOL isConnected() {
         return connected;
     }
 protected:
-    bool shouldExit() {
+    BOOL shouldExit() {
         return (exitThread == 1);
     }
 
-    s32 getClientFD() {
+    int32_t getClientFD() {
         return clientfd;
     }
 
-    s32 getSocketFD() {
+    int32_t getSocketFD() {
         return sockfd;
     }
 
@@ -41,7 +41,7 @@ private:
     static void DoTCPThread(CThread *thread, void *arg);
     virtual void DoTCPThreadInternal();
 
-    virtual bool acceptConnection() = 0;
+    virtual BOOL acceptConnection() = 0;
 
     virtual void onConnectionClosed(){
         DEBUG_FUNCTION_LINE("Default onConnectionClosed \n");
@@ -50,16 +50,16 @@ private:
     /**
         Called when a connection has be accepted.
     **/
-    virtual bool whileLoop() = 0;
+    virtual BOOL whileLoop() = 0;
 
     struct sockaddr_in sock_addr;
-    volatile s32 sockfd = -1;
-    volatile s32 clientfd = -1;
+    volatile int32_t sockfd = -1;
+    volatile int32_t clientfd = -1;
 
-    s32 port = 0;
-    volatile bool connected = false;
+    int32_t port = 0;
+    volatile BOOL connected = false;
 
-    volatile s32 exitThread = 0;
+    volatile int32_t exitThread = 0;
     CThread *pThread = NULL;
 };
 

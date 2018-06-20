@@ -32,16 +32,16 @@
 
 class StringTools{
     public:
-        static bool EndsWith(const std::string& a, const std::string& b);
-        static const char * byte_to_binary(s32 x);
+        static BOOL EndsWith(const std::string& a, const std::string& b);
+        static const char * byte_to_binary(int32_t x);
         static std::string removeCharFromString(std::string& input,char toBeRemoved);
         static const char * fmt(const char * format, ...);
         static const wchar_t * wfmt(const char * format, ...);
-        static s32 strprintf(std::string &str, const char * format, ...);
+        static int32_t strprintf(std::string &str, const char * format, ...);
         static std::string strfmt(const char * format, ...);
-        static bool char2wchar_t(const char * src, wchar_t * dest);
-        static s32 strtokcmp(const char * string, const char * compare, const char * separator);
-        static s32 strextcmp(const char * string, const char * extension, char seperator);
+        static BOOL char2wchar_t(const char * src, wchar_t * dest);
+        static int32_t strtokcmp(const char * string, const char * compare, const char * separator);
+        static int32_t strextcmp(const char * string, const char * extension, char seperator);
 
         static const char * FullpathToFilename(const char *path){
             if(!path) return path;
@@ -61,10 +61,10 @@ class StringTools{
         }
 
         static void RemoveDoubleSlashs(std::string &str){
-            u32 length = str.size();
+            uint32_t length = str.size();
 
             //! clear path of double slashes
-            for(u32 i = 1; i < length; ++i)
+            for(uint32_t i = 1; i < length; ++i)
             {
                 if(str[i-1] == '/' && str[i] == '/')
                 {

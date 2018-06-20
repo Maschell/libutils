@@ -19,13 +19,13 @@ public:
 
     CFile();
     CFile(const std::string & filepath, eOpenTypes mode);
-    CFile(const u8 * memory, s32 memsize);
+    CFile(const uint8_t * memory, int32_t memsize);
     virtual ~CFile();
 
-    s32 open(const std::string & filepath, eOpenTypes mode);
-    s32 open(const u8 * memory, s32 memsize);
+    int32_t open(const std::string & filepath, eOpenTypes mode);
+    int32_t open(const uint8_t * memory, int32_t memsize);
 
-    bool isOpen() const {
+    BOOL isOpen() const {
         if(iFd >= 0)
             return true;
 
@@ -37,14 +37,14 @@ public:
 
     void close();
 
-    s32 read(u8 * ptr, size_t size);
-    s32 write(const u8 * ptr, size_t size);
-    s32 fwrite(const char *format, ...);
-    s32 seek(long int offset, s32 origin);
-    u64 tell() {
+    int32_t read(uint8_t * ptr, size_t size);
+    int32_t write(const uint8_t * ptr, size_t size);
+    int32_t fwrite(const char *format, ...);
+    int32_t seek(long int offset, int32_t origin);
+    uint64_t tell() {
         return pos;
     };
-    u64 size() {
+    uint64_t size() {
         return filesize;
     };
     void rewind() {
@@ -52,10 +52,10 @@ public:
     };
 
 protected:
-    s32 iFd;
-    const u8 * mem_file;
-    u64 filesize;
-    u64 pos;
+    int32_t iFd;
+    const uint8_t * mem_file;
+    uint64_t filesize;
+    uint64_t pos;
 };
 
 #endif

@@ -8,7 +8,7 @@
 
 #define wiiu_errno (*__gh_errno_ptr())
 
-TCPServer::TCPServer(s32 port,s32 priority) {
+TCPServer::TCPServer(int32_t port,int32_t priority) {
     this->port = port;
     this->sockfd = -1;
     this->clientfd = -1;
@@ -51,7 +51,7 @@ void TCPServer::ErrorHandling() {
 }
 
 void TCPServer::DoTCPThreadInternal() {
-    s32 ret;
+    int32_t ret;
     socklen_t len;
     connected = false;
     while (1) {
@@ -68,7 +68,7 @@ void TCPServer::DoTCPThreadInternal() {
             ErrorHandling();
             continue;
         }
-        s32 enable = 1;
+        int32_t enable = 1;
 
         setsockopt(this->sockfd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(enable));
 

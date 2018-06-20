@@ -7,12 +7,12 @@ extern "C" {
 
 #include <wut_types.h>
 
-s32 recvwait(s32 sock, void *buffer, s32 len);
-u8 recvbyte(s32 sock);
-u32 recvword(s32 sock);
-s32 checkbyte(s32 sock);
-s32 sendwait(s32 sock, const void *buffer, s32 len);
-s32 sendbyte(s32 sock, unsigned char byte);
+int32_t recvwait(int32_t sock, void *buffer, int32_t len);
+uint8_t recvbyte(int32_t sock);
+uint32_t recvword(int32_t sock);
+int32_t checkbyte(int32_t sock);
+int32_t sendwait(int32_t sock, const void *buffer, int32_t len);
+int32_t sendbyte(int32_t sock, unsigned char byte);
 
 #ifdef __cplusplus
 }
