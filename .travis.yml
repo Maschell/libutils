@@ -1,40 +1,60 @@
 language: cpp
-
 os: linux
 sudo: false
 dist: trusty
-
+branches:
+  only:
+  - wut
 env:
   global:
-    - DEVKITPRO=/opt/devkitpro
-    - WUT_ROOT=/opt/devkitpro/wut
-    - DEVKITPPC=/opt/devkitpro/devkitPPC
-
+  - DEVKITPRO=/opt/devkitpro
+  - WUT_ROOT=/opt/devkitpro/wut
+  - DEVKITPPC=/opt/devkitpro/devkitPPC
 cache:
   directories:
-    - "$HOME/.local"
-    - "$DEVKITPRO"
-
+  - "$HOME/.local"
+  - "$DEVKITPRO"
 addons:
   apt:
     packages:
     - p7zip-full
-
 before_install:
-  - mkdir -p "${DEVKITPRO}"
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget https://github.com/devkitPro/pacman/releases/download/devkitpro-pacman-1.0.1/devkitpro-pacman.deb -O /tmp/devkitpro-pacman.deb; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo dpkg -i /tmp/devkitpro-pacman.deb; fi
-  - yes | sudo dkp-pacman -Syu devkitPPC --needed
-  - wget $(curl -s https://api.github.com/repos/decaf-emu/wut/releases/latest | grep 'browser_' | grep 'linux' | cut -d\" -f4)
-
-
+- mkdir -p "${DEVKITPRO}"
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then wget https://github.com/devkitPro/pacman/releases/download/devkitpro-pacman-1.0.1/devkitpro-pacman.deb
+  -O /tmp/devkitpro-pacman.deb; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo dpkg -i /tmp/devkitpro-pacman.deb;
+  fi
+- yes | sudo dkp-pacman -Syu devkitPPC --needed
+- wget $(curl -s https://api.github.com/repos/decaf-emu/wut/releases/latest | grep
+  'browser_' | grep 'linux' | cut -d\" -f4)
 install:
-  - 7z x -y $(ls | grep "linux") -o${WUT_ROOT}
-
+- 7z x -y $(ls | grep "linux") -o${WUT_ROOT}
 before_script:
-  - cd $TRAVIS_BUILD_DIR/
-  
+- cd $TRAVIS_BUILD_DIR/
 script:
-  - mkdir build && cd build
-  - cmake -DCMAKE_TOOLCHAIN_FILE=$WUT_ROOT/share/wut.toolchain.cmake -DCMAKE_INSTALL_PREFIX=$WUT_ROOT ../
-  - make install
+- mkdir build && cd build
+- cmake -DCMAKE_TOOLCHAIN_FILE=$WUT_ROOT/share/wut.toolchain.cmake -DCMAKE_INSTALL_PREFIX=$WUT_ROOT
+  ../
+- make
+before_deploy:
+- commit="$(git rev-parse --short=7 HEAD)"
+- mkdir -p deploy
+- mkdir -p deploy/lib
+- mkdir -p deploy/include
+- cp build/libutilswut.a deploy/lib
+- cp -r include/* deploy/include
+- cd deploy
+- zip -r libutilswut_$commit.zip .
+- cd ..
+- commitLog="$(git log -1 --pretty=%B)"
+- commitMessage="$(echo -e "-\n" && echo "libutilswut nightly build." && echo -e "\nCommitlog:\n")"
+- git tag $GIT_TAG -a -m "$commitMessage" -m "$commitLog"
+- git push --quiet https://$GITHUBKEY@github.com/Maschell/libutils $GIT_TAG > /dev/null 2>&1
+deploy:
+  provider: releases
+  api_key:
+    secure: DAZ+eq6SNbj+gTwUIvT8TDeCbKPiDUrgw8p/x/lMoWhdVBWqnlC0WMm1O8k8GNdqOUDXzswkU/Xq58BvF0C8CZos0q4Dhs+oOm3simP3YeAZFf13jWXlocdJPI+kvgp4WS6sK+5H+ZiCNa3zc2/e9sLYsI31eXjtIaF+B8UfzkI/abphoUMCCYm4gmH+VHUVKlqjK1fIrRFbcmn+Ks3QzrjHq95/i90UmJk4GjWwftAac6nmjtEQPitFtMS+J7ebp2S9eiMAUgb7oIkuzgHasKCFNxS8Fw34B0KUs5iSepzqetw97LzZCfKhTVamYXq2pkXfkpMJVbL7KVvhas/3b2xNrduZPU61ieI/RdY3J1a9M9ZKwlRDFIdGw/zHcsTmsv1gScWeXgWv0vW6h98uzQBEgJvpgnvV8lNTOmSToURe41WIgoCMiNJ7okEkPP0cCjMnmGaReC4t6B9DfbQMJv4m3BCgRkM8BFosqv9/5rx0xnxa/zffX+YMxx3N9MwyS95AUZ70Yb3hq2crzCCbo4LzfIofbBhQ4TVGD8y/Qq/lLmM1FGh8+xYeYL1sOUx4OxK4Y03l1aOumUKnaAwgKF06uJgMigg59WRi71r4Tkwqui8LC8/XEDdV+IyaD85NU82wb9fVSIV5UZXTPc8IXsdZZQ3Ezw23cr/imbGBOA8=
+  file: deploy/libutilswut_$commit.zip
+  on:
+    repo: Maschell/libutils
+    branch: wut
