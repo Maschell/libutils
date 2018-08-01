@@ -37,6 +37,7 @@ script:
   ../
 - make
 before_deploy:
+- cd $TRAVIS_BUILD_DIR/
 - commit="$(git rev-parse --short=7 HEAD)"
 - mkdir -p deploy
 - mkdir -p deploy/lib
