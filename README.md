@@ -20,7 +20,7 @@ Usage in the application:
 ```
 socket_lib_init();
 log_init(); // Enables broadcast logging.
-printf("Just prints this text\n");
+log_printf("Just prints this text\n");
 DEBUG_FUNCTION_LINE("This prints my current function, file and line\n");
 ```
 
