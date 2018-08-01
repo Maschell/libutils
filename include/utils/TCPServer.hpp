@@ -31,6 +31,12 @@ protected:
         return sockfd;
     }
 
+    void setThreadPriority(int32_t priority) {
+        if(pThread != NULL){
+            pThread->setThreadPriority(priority);
+        }
+    }
+
     struct sockaddr_in getSockAddr() {
         return sock_addr;
     }
