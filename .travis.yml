@@ -48,7 +48,7 @@ before_deploy:
 - zip -r libutilswut_$commit.zip .
 - cd ..
 - export GIT_TAG=libutilwut-$commit
-- commitLog="$(git log -1 --pretty=%B)"
+- commitLog="$(git log -1 wut --pretty=%B)"
 - commitMessage="$(echo -e "-\n" && echo "libutilswut nightly build." && echo -e "\nCommitlog:\n")"
 - git tag $GIT_TAG -a -m "$commitMessage" -m "$commitLog"
 deploy:
