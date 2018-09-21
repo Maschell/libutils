@@ -60,6 +60,14 @@ make && make install
 - Application needs to be loaded from the [homebrew_launcher](https://github.com/dimok789/homebrew_launcher)
 - [dynamic_libs](https://github.com/Maschell/dynamic_libs/tree/lib) for access to the functions.
 
+# Use the prebuilt files from a Docker image.
+The image `wiiulegacy/libutils` on [Docker Hub](https://hub.docker.com/r/wiiulegacy/libutils/) provides a prebuilt library in the `/artifacts` directory. Copy it into your DevkitPPC portlibs folder.  
+
+Example:  
+```
+COPY --from=wiiulegacy/libutils:0.1 /artifacts $DEVKITPRO/portlibs
+```
+
 # Credits (TODO)
 
 - Serveral users
