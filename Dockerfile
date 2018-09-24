@@ -9,9 +9,7 @@ RUN git clone https://github.com/Maschell/libutils -b master && cd libutils && g
 WORKDIR libutils
 
 RUN make && \
-	rm -rf $DEVKITPRO/portlibs && \
-	mkdir -p $DEVKITPRO/portlibs/ppc/lib && \
-	mkdir -p $DEVKITPRO/portlibs/ppc/include && \
+	find $DEVKITPRO/portlibs -maxdepth 3 -type f -delete && \
 	make install && \
 	cp -r ${DEVKITPRO}/portlibs /artifacts
 
