@@ -14,3 +14,6 @@ RUN make && \
 	cp -r ${DEVKITPRO}/portlibs /artifacts
 
 WORKDIR /artifacts
+
+FROM scratch
+COPY --from=0 /artifacts /artifacts
