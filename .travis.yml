@@ -25,25 +25,19 @@ before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo dpkg -i /tmp/devkitpro-pacman.deb;
   fi
 - yes | sudo dkp-pacman -Syu devkitPPC --needed
-- wget $(curl -s https://api.github.com/repos/decaf-emu/wut/releases/latest | grep
-  'browser_' | grep 'linux' | cut -d\" -f4)
+- wget https://github.com/decaf-emu/wut/releases/download/1.0.0-beta6/wut.linux64.7z
 install:
 - 7z x -y $(ls | grep "linux") -o${WUT_ROOT}
 before_script:
 - cd $TRAVIS_BUILD_DIR/
 script:
 - mkdir build && cd build
-- cmake -DCMAKE_TOOLCHAIN_FILE=$WUT_ROOT/share/wut.toolchain.cmake -DCMAKE_INSTALL_PREFIX=$WUT_ROOT
+- cmake -DCMAKE_TOOLCHAIN_FILE=$WUT_ROOT/share/wut.toolchain.cmake -DCMAKE_INSTALL_PREFIX=$TRAVIS_BUILD_DIR/deploy
   ../
 - make
 before_deploy:
 - cd $TRAVIS_BUILD_DIR/
 - commit="$(git rev-parse --short=7 HEAD)"
-- mkdir -p deploy
-- mkdir -p deploy/lib
-- mkdir -p deploy/include
-- cp build/libutilswut.a deploy/lib
-- cp -r include/* deploy/include
 - cd deploy
 - zip -r libutilswut_$commit.zip .
 - cd ..
